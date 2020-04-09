@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 import base64
-
+from decimal import Decimal
 
 assert settings.PAYCOM_SETTINGS.get('PAYCOM_ENV') != None
 assert settings.PAYCOM_SETTINGS.get('TOKEN') != None
@@ -69,14 +69,15 @@ class Response(object):
         response = requests.post(url=self.URL, json=data, headers=AUTHORIZATION)
         return response.json()
 
-    def create_initialization(self, amount: int, order_id, order_type=None) -> str:
+    def create_initialization(self, amount: Decimal, order_id: str, return_url: str, order_type: str = None) -> str:
         """
 
         documentation : https://help.paycom.uz/ru/initsializatsiya-platezhey/otpravka-cheka-po-metodu-get
 
-        >>> self.create_initialization(amount=5000.00)
+        >>> self.create_initialization(amount=Decimal(5000.00), order_id='1', return_url='https://example.com/success/')
         """
-        params = f"m={TOKEN};ac.{KEY_1}={order_id};a={amount}"
+
+        params = f"m={TOKEN};ac.{KEY_1}={order_id};a={amount};c={return_url}"
         if order_type:
             params += f"ac.{KEY_2}"
         encode_params = base64.b64encode(params.encode("utf-8"))
