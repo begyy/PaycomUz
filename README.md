@@ -84,3 +84,13 @@ print(verify)
 result = paycom.create_transaction(token=token, order_id=1, amount=amount)
 print(result)
 ```
+
+### create_initialization.py
+https://help.paycom.uz/uz/initsializatsiya-platezhey/otpravka-cheka-po-metodu-get
+```python
+from paycomuz.methods_subscribe_api import Paycom
+paycom = Paycom()
+url = paycom.create_initialization(amount=5.00, order_id='197', return_url='https://example.com/success/')
+print(url)
+```
+![alt text](https://help.paycom.uz/images/ru/payment_initialization/checkout-get-method-response.png)
