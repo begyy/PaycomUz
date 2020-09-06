@@ -24,7 +24,7 @@ CARD_VERIFY = 'cards.verify'
 class Response(object):
     TEST_URL = 'https://checkout.test.paycom.uz/api'
     PRODUCTION_URL = 'https://checkout.paycom.uz/api'
-    INITIALIZATION_URL = 'https://checkout.paycom.uz/'
+    INITIALIZATION_URL = 'https://checkout.paycom.uz'
     TEST_INITIALIZATION_URL = 'https://checkout.test.paycom.uz'
     URL = PRODUCTION_URL if PAYCOM_ENV else TEST_URL
     LINK = INITIALIZATION_URL if PAYCOM_ENV else TEST_INITIALIZATION_URL
