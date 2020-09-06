@@ -31,7 +31,7 @@ class MerchantAPIView(APIView):
         }
         self.REPLY_RESPONSE = {
             ORDER_FOUND: self.order_found,
-            ORDER_NOT_FOND: self.order_not_found,
+            ORDER_NOT_FOUND: self.order_not_found,
             INVALID_AMOUNT: self.invalid_amount
         }
         super(MerchantAPIView, self).__init__()
@@ -71,7 +71,7 @@ class MerchantAPIView(APIView):
             assert self.VALIDATE_CLASS != None
             result = self.VALIDATE_CLASS().check_order(**validated_data['params'])
             assert result != None
-            if result == ORDER_NOT_FOND or result == INVALID_AMOUNT:
+            if result == ORDER_NOT_FOUND or result == INVALID_AMOUNT:
                 self.REPLY_RESPONSE[result](validated_data)
             else:
                 obj = Transaction.objects.create(
@@ -116,8 +116,8 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOND,
-                message=TRANSACTION_NOT_FOND_MESSAGE
+                code=TRANSACTION_NOT_FOUND,
+                message=TRANSACTION_NOT_FOUND_MESSAGE
             ))
 
     def order_found(self, validated_data):
@@ -126,8 +126,8 @@ class MerchantAPIView(APIView):
     def order_not_found(self, validated_data):
         self.reply = dict(error=dict(
             id=validated_data['id'],
-            code=ORDER_NOT_FOND,
-            message=ORDER_NOT_FOND_MESSAGE
+            code=ORDER_NOT_FOUND,
+            message=ORDER_NOT_FOUND_MESSAGE
         ))
 
     def invalid_amount(self, validated_data):
