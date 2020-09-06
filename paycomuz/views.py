@@ -61,25 +61,31 @@ class MerchantAPIView(APIView):
         check_transaction = Transaction.objects.filter(_id=validated_data['params']['id']).exists()
         if check_transaction:
             check_transaction.update(state=CANCEL_TRANSACTION, status=Transaction.FAILED)
-
             self.reply = dict(error=dict(
                 id=validated_data['id'],
                 code=UNABLE_TO_PERFORM_OPERATION,
                 message=UNABLE_TO_PERFORM_OPERATION_MESSAGE
             ))
         else:
-            obj = Transaction.objects.create(
-                request_id=validated_data['id'],
-                _id=validated_data['params']['id'],
-                amount=validated_data['params']['amount'] / 100,
-                account=validated_data['params']['account'],
-                state=CREATE_TRANSACTION
-            )
-            self.reply = dict(result=dict(
-                create_time=datetime.now().timestamp(),
-                transaction=obj.id,
-                state=CREATE_TRANSACTION
-            ))
+            # Check perform transaction first
+            assert self.VALIDATE_CLASS != None
+            result = self.VALIDATE_CLASS().check_order(**validated_data['params'])
+            assert result != None
+            if result == ORDER_NOT_FOND or result == INVALID_AMOUNT:
+                self.REPLY_RESPONSE[result](validated_data)
+            else:
+                obj = Transaction.objects.create(
+                    request_id=validated_data['id'],
+                    _id=validated_data['params']['id'],
+                    amount=validated_data['params']['amount'] / 100,
+                    account=validated_data['params']['account'],
+                    state=CREATE_TRANSACTION
+                )
+                self.reply = dict(result=dict(
+                    create_time=datetime.now().timestamp(),
+                    transaction=obj.id,
+                    state=CREATE_TRANSACTION
+                ))
 
     def perform_transaction(self, validated_data):
         """
