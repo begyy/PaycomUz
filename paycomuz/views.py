@@ -69,7 +69,8 @@ class MerchantAPIView(APIView):
         else:
             # Check perform transaction first
             assert self.VALIDATE_CLASS != None
-            result = self.VALIDATE_CLASS().check_order(**validated_data['params'])
+            result = self.VALIDATE_CLASS().check_order(amount=validated_data['params']['amount'],
+                                                       account=validated_data['params']['account'])
             assert result != None
             if result == ORDER_NOT_FOUND or result == INVALID_AMOUNT:
                 self.REPLY_RESPONSE[result](validated_data)
