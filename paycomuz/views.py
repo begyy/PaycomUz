@@ -31,7 +31,7 @@ class MerchantAPIView(APIView):
         }
         self.REPLY_RESPONSE = {
             ORDER_FOUND: self.order_found,
-            ORDER_NOT_FOUND: self.order_not_found,
+            ORDER_NOT_FOND: self.order_not_found,
             INVALID_AMOUNT: self.invalid_amount
         }
         super(MerchantAPIView, self).__init__()
@@ -61,32 +61,25 @@ class MerchantAPIView(APIView):
         check_transaction = Transaction.objects.filter(_id=validated_data['params']['id']).exists()
         if check_transaction:
             check_transaction.update(state=CANCEL_TRANSACTION, status=Transaction.FAILED)
+
             self.reply = dict(error=dict(
                 id=validated_data['id'],
                 code=UNABLE_TO_PERFORM_OPERATION,
                 message=UNABLE_TO_PERFORM_OPERATION_MESSAGE
             ))
         else:
-            # Check perform transaction first
-            assert self.VALIDATE_CLASS != None
-            result = self.VALIDATE_CLASS().check_order(amount=validated_data['params']['amount'],
-                                                       account=validated_data['params']['account'])
-            assert result != None
-            if result == ORDER_NOT_FOUND or result == INVALID_AMOUNT:
-                self.REPLY_RESPONSE[result](validated_data)
-            else:
-                obj = Transaction.objects.create(
-                    request_id=validated_data['id'],
-                    _id=validated_data['params']['id'],
-                    amount=validated_data['params']['amount'] / 100,
-                    account=validated_data['params']['account'],
-                    state=CREATE_TRANSACTION
-                )
-                self.reply = dict(result=dict(
-                    create_time=datetime.now().timestamp(),
-                    transaction=obj.id,
-                    state=CREATE_TRANSACTION
-                ))
+            obj = Transaction.objects.create(
+                request_id=validated_data['id'],
+                _id=validated_data['params']['id'],
+                amount=validated_data['params']['amount'] / 100,
+                account=validated_data['params']['account'],
+                state=CREATE_TRANSACTION
+            )
+            self.reply = dict(result=dict(
+                create_time=datetime.now().timestamp(),
+                transaction=obj.id,
+                state=CREATE_TRANSACTION
+            ))
 
     def perform_transaction(self, validated_data):
         """
@@ -117,8 +110,8 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOUND,
-                message=TRANSACTION_NOT_FOUND_MESSAGE
+                code=TRANSACTION_NOT_FOND,
+                message=TRANSACTION_NOT_FOND_MESSAGE
             ))
 
     def order_found(self, validated_data):
@@ -127,8 +120,8 @@ class MerchantAPIView(APIView):
     def order_not_found(self, validated_data):
         self.reply = dict(error=dict(
             id=validated_data['id'],
-            code=ORDER_NOT_FOUND,
-            message=ORDER_NOT_FOUND_MESSAGE
+            code=ORDER_NOT_FOND,
+            message=ORDER_NOT_FOND_MESSAGE
         ))
 
     def invalid_amount(self, validated_data):
