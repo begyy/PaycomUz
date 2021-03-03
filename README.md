@@ -23,12 +23,10 @@ PaycomUz 2 +
 
 ```python
 PAYCOM_SETTINGS = {
-    "PAYCOM_ENV": False,  # test host
-    "TOKEN": "token",  # token
-    "SECRET_KEY": "password",  # password
+    "KASSA_ID": "KASSA ID",  # token
+    "SECRET_KEY": "TEST KEY OR PRODUCTIN KEY",  # password
     "ACCOUNTS": {
-        "KEY_1": "order_id",
-        "KEY_2": None  # or "type"
+        "KEY": "order_id"
     }
 }
 
