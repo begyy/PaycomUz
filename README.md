@@ -74,7 +74,7 @@ urlpatterns = [
 ### create_initialization.py
 https://help.paycom.uz/uz/initsializatsiya-platezhey/otpravka-cheka-po-metodu-get
 ```python
-from paycomuz.methods_subscribe_api import Paycom
+from paycomuz import Paycom
 paycom = Paycom()
 url = paycom.create_initialization(amount=5.00, order_id='197', return_url='https://example.com/success/')
 print(url)
