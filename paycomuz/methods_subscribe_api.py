@@ -6,7 +6,7 @@ assert settings.PAYCOM_SETTINGS.get('KASSA_ID') != None
 assert settings.PAYCOM_SETTINGS.get('ACCOUNTS') != None
 assert settings.PAYCOM_SETTINGS['ACCOUNTS'].get('KEY') != None
 
-TOKEN = settings.PAYCOM_SETTINGS['TOKEN']
+TOKEN = settings.PAYCOM_SETTINGS['KASSA_ID']
 KEY = settings.PAYCOM_SETTINGS['ACCOUNTS']['KEY']
 
 
