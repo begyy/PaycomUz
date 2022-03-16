@@ -1,5 +1,5 @@
-ORDER_NOT_FOND = -31050
-TRANSACTION_NOT_FOND = -31003
+ORDER_NOT_FOUND = -31050
+TRANSACTION_NOT_FOUND = -31003
 UNABLE_TO_PERFORM_OPERATION = -31008
 INVALID_AMOUNT = -31001
 ORDER_FOUND = 200
@@ -13,10 +13,10 @@ ORDER_NOT_FOND_MESSAGE = {
     "ru": "Заказ не найден",
     "en": "Order not fond"
 }
-TRANSACTION_NOT_FOND_MESSAGE = {
+TRANSACTION_NOT_FOUND_MESSAGE = {
     "uz": "Tranzaksiya topilmadi",
     "ru": "Транзакция не найдена",
-    "en": "Transaction not fond"
+    "en": "Transaction not found"
 }
 UNABLE_TO_PERFORM_OPERATION_MESSAGE = {
     "uz": "Ushbu amalni bajarib bo'lmaydi",
@@ -33,10 +33,10 @@ AUTH_ERROR = {
     "error": {
         "code": -32504,
         "message": {
-            "ru": "user not exists",
-            "uz": "user not exists",
-            "en": "user not exists"
+            "ru": "пользователь не существует",
+            "uz": "foydalanuvchi mavjud emas",
+            "en": "user does not exist"
         },
-        "data": "user not exists"
+        "data": "user does not exist"
     }
 }

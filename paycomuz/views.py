@@ -38,7 +38,7 @@ class MerchantAPIView(APIView):
         }
         self.REPLY_RESPONSE = {
             ORDER_FOUND: self.order_found,
-            ORDER_NOT_FOND: self.order_not_found,
+            ORDER_NOT_FOUND: self.order_not_found,
             INVALID_AMOUNT: self.invalid_amount
         }
         super(MerchantAPIView, self).__init__()
@@ -93,7 +93,7 @@ class MerchantAPIView(APIView):
             else:
                 self.reply = dict(error=dict(
                     id=validated_data['id'],
-                    code=ORDER_NOT_FOND,
+                    code=ORDER_NOT_FOUND,
                     message=ORDER_NOT_FOND_MESSAGE
                 ))
         else:
@@ -147,8 +147,8 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOND,
-                message=TRANSACTION_NOT_FOND_MESSAGE
+                code=TRANSACTION_NOT_FOUND,
+                message=TRANSACTION_NOT_FOUND_MESSAGE
             ))
 
     def check_transaction(self, validated_data):
@@ -164,8 +164,8 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOND,
-                message=TRANSACTION_NOT_FOND_MESSAGE
+                code=TRANSACTION_NOT_FOUND,
+                message=TRANSACTION_NOT_FOUND_MESSAGE
             ))
 
     def cancel_transaction(self, validated_data):
@@ -193,8 +193,8 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOND,
-                message=TRANSACTION_NOT_FOND_MESSAGE
+                code=TRANSACTION_NOT_FOUND,
+                message=TRANSACTION_NOT_FOUND_MESSAGE
             ))
 
     def order_found(self, validated_data):
@@ -203,7 +203,7 @@ class MerchantAPIView(APIView):
     def order_not_found(self, validated_data):
         self.reply = dict(error=dict(
             id=validated_data['id'],
-            code=ORDER_NOT_FOND,
+            code=ORDER_NOT_FOUND,
             message=ORDER_NOT_FOND_MESSAGE
         ))
 

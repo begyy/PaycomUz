@@ -12,4 +12,4 @@ class TransactionAdmin(admin.ModelAdmin):
     search_fields = ['request_id', 'status', 'id', '_id']
 
 
-admin.site.register(Transaction)
+admin.site.register(Transaction, TransactionAdmin)
