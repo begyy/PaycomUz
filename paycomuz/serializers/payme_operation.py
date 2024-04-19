@@ -8,6 +8,7 @@ class PaycomOperationSerialzer(serializers.Serializer):
     CHECK_TRANSACTION = 'CheckTransaction'
     CANCEL_TRANSACTION = 'CancelTransaction'
     GET_STATEMENT = 'GetStatement'
+
     METHODS = (
         (CHECK_PERFORM_TRANSACTION, CHECK_PERFORM_TRANSACTION),
         (CREATE_TRANSACTION, CREATE_TRANSACTION),
@@ -16,6 +17,7 @@ class PaycomOperationSerialzer(serializers.Serializer):
         (CANCEL_TRANSACTION, CANCEL_TRANSACTION),
         (GET_STATEMENT, GET_STATEMENT),
     )
+    
     id = serializers.IntegerField()
     method = serializers.ChoiceField(choices=METHODS)
     params = serializers.JSONField()

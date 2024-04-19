@@ -39,11 +39,13 @@ class MerchantAPIView(APIView):
             self.CANCEL_TRANSACTION: self.cancel_transaction,
             self.GET_STATEMENT: self.get_statement
         }
+
         self.REPLY_RESPONSE = {
             ORDER_FOUND: self.order_found,
-            ORDER_NOT_FOND: self.order_not_found,
+            ORDER_NOT_FOUND: self.order_not_found,
             INVALID_AMOUNT: self.invalid_amount
         }
+
         super(MerchantAPIView, self).__init__()
 
     def post(self, request):
@@ -96,8 +98,8 @@ class MerchantAPIView(APIView):
             else:
                 self.reply = dict(error=dict(
                     id=validated_data['id'],
-                    code=ORDER_NOT_FOND,
-                    message=ORDER_NOT_FOND_MESSAGE
+                    code=ORDER_NOT_FOUND,
+                    message=ORDER_NOT_FOUND_MESSAGE
                 ))
         else:
             current_time = datetime.now()
@@ -150,8 +152,8 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOND,
-                message=TRANSACTION_NOT_FOND_MESSAGE
+                code=TRANSACTION_NOT_FOUND,
+                message=TRANSACTION_NOT_FOUND_MESSAGE
             ))
 
     def check_transaction(self, validated_data):
@@ -167,8 +169,8 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOND,
-                message=TRANSACTION_NOT_FOND_MESSAGE
+                code=TRANSACTION_NOT_FOUND,
+                message=TRANSACTION_NOT_FOUND_MESSAGE
             ))
 
     def cancel_transaction(self, validated_data):
@@ -196,10 +198,10 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOND,
-                message=TRANSACTION_NOT_FOND_MESSAGE
+                code=TRANSACTION_NOT_FOUND,
+                message=TRANSACTION_NOT_FOUND_MESSAGE
             ))
-    
+
     def get_statement(self, validated_data):
         from_d = validated_data.get('params').get('from')
         to_d = validated_data.get('params').get('to')
@@ -207,7 +209,7 @@ class MerchantAPIView(APIView):
         filtered_transactions = Transaction.objects.filter(
             created_datetime__gte=from_d,
             created_datetime__lte=to_d
-        )        
+        )
 
         transactions_json = [
             dict(
@@ -241,8 +243,8 @@ class MerchantAPIView(APIView):
     def order_not_found(self, validated_data):
         self.reply = dict(error=dict(
             id=validated_data['id'],
-            code=ORDER_NOT_FOND,
-            message=ORDER_NOT_FOND_MESSAGE
+            code=ORDER_NOT_FOUND,
+            message=ORDER_NOT_FOUND_MESSAGE
         ))
 
     def invalid_amount(self, validated_data):
