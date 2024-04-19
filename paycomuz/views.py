@@ -22,6 +22,8 @@ class MerchantAPIView(APIView):
     PERFORM_TRANSACTION = 'PerformTransaction'
     CHECK_TRANSACTION = 'CheckTransaction'
     CANCEL_TRANSACTION = 'CancelTransaction'
+    GET_STATEMENT = 'GetStatement'
+
     http_method_names = ['post']
     authentication_classes = []
     VALIDATE_CLASS: Paycom = None
@@ -34,11 +36,12 @@ class MerchantAPIView(APIView):
             self.CREATE_TRANSACTION: self.create_transaction,
             self.PERFORM_TRANSACTION: self.perform_transaction,
             self.CHECK_TRANSACTION: self.check_transaction,
-            self.CANCEL_TRANSACTION: self.cancel_transaction
+            self.CANCEL_TRANSACTION: self.cancel_transaction,
+            self.GET_STATEMENT: self.get_statement
         }
         self.REPLY_RESPONSE = {
             ORDER_FOUND: self.order_found,
-            ORDER_NOT_FOUND: self.order_not_found,
+            ORDER_NOT_FOND: self.order_not_found,
             INVALID_AMOUNT: self.invalid_amount
         }
         super(MerchantAPIView, self).__init__()
@@ -93,7 +96,7 @@ class MerchantAPIView(APIView):
             else:
                 self.reply = dict(error=dict(
                     id=validated_data['id'],
-                    code=ORDER_NOT_FOUND,
+                    code=ORDER_NOT_FOND,
                     message=ORDER_NOT_FOND_MESSAGE
                 ))
         else:
@@ -147,8 +150,8 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOUND,
-                message=TRANSACTION_NOT_FOUND_MESSAGE
+                code=TRANSACTION_NOT_FOND,
+                message=TRANSACTION_NOT_FOND_MESSAGE
             ))
 
     def check_transaction(self, validated_data):
@@ -164,8 +167,8 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOUND,
-                message=TRANSACTION_NOT_FOUND_MESSAGE
+                code=TRANSACTION_NOT_FOND,
+                message=TRANSACTION_NOT_FOND_MESSAGE
             ))
 
     def cancel_transaction(self, validated_data):
@@ -193,9 +196,44 @@ class MerchantAPIView(APIView):
         except Transaction.DoesNotExist:
             self.reply = dict(error=dict(
                 id=request_id,
-                code=TRANSACTION_NOT_FOUND,
-                message=TRANSACTION_NOT_FOUND_MESSAGE
+                code=TRANSACTION_NOT_FOND,
+                message=TRANSACTION_NOT_FOND_MESSAGE
             ))
+    
+    def get_statement(self, validated_data):
+        from_d = validated_data.get('params').get('from')
+        to_d = validated_data.get('params').get('to')
+
+        filtered_transactions = Transaction.objects.filter(
+            created_datetime__gte=from_d,
+            created_datetime__lte=to_d
+        )        
+
+        transactions_json = [
+            dict(
+                id = obj._id,
+                time = int(obj.created_datetime),
+                amount = obj.amount,
+                account = dict(
+                    order_id = obj.order_key
+                ),
+                create_time = int(obj.created_datetime),
+                perform_time = int(obj.perform_datetime) if obj.perform_datetime else 0,
+                cancel_time = int(obj.cancel_datetime),
+                transaction = obj.request_id,
+                state = obj.state,
+                reason = obj.reason,
+            ) 
+            
+            for obj in filtered_transactions]
+
+        response = dict(
+            result = dict(
+                transactions = transactions_json
+            )
+        )
+
+        self.reply = response
 
     def order_found(self, validated_data):
         self.reply = dict(result=dict(allow=True))
@@ -203,7 +241,7 @@ class MerchantAPIView(APIView):
     def order_not_found(self, validated_data):
         self.reply = dict(error=dict(
             id=validated_data['id'],
-            code=ORDER_NOT_FOUND,
+            code=ORDER_NOT_FOND,
             message=ORDER_NOT_FOND_MESSAGE
         ))
 
