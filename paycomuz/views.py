@@ -233,9 +233,9 @@ class MerchantAPIView(APIView):
                 account = dict(
                     order_id = obj.order_key
                 ),
-                create_time = int(obj.created_datetime) if obj.perform_datetime else 0,
+                create_time = int(obj.created_datetime) if obj.created_datetime else 0,
                 perform_time = int(obj.perform_datetime) if obj.perform_datetime else 0,
-                cancel_time = int(obj.cancel_datetime) if obj.perform_datetime else 0,
+                cancel_time = int(obj.cancel_datetime) if obj.cancel_datetime else 0,
                 transaction = obj.request_id,
                 state = obj.state,
                 reason = obj.reason,
