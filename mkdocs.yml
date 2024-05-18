@@ -1,0 +1,37 @@
+site_name: PaycomUz
+
+theme:
+  name: material
+repo_name: begyy/PaycomUz
+repo_url: https://github.com/begyy/PaycomUz
+
+nav:
+  - Kirish: index.md
+  - Ishni boshlash: getting_started.md
+  - URL yaratish: generate_url.md
+  - Buyurtmani tekshirish: check_order.md
+
+theme: material
+
+
+google_analytics:
+  - UA-133183413-1
+  - auto
+
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - markdown.extensions.codehilite:
+      guess_lang: false
+  - markdown_include.include:
+      base_path: docs
+  - admonition
+  - codehilite
+  - extra
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+  - pymdownx.tabbed

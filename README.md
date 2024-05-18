@@ -27,7 +27,7 @@ PAYCOM_SETTINGS = {
     "SECRET_KEY": "TEST KEY OR PRODUCTIN KEY",  # password
     "ACCOUNTS": {
         "KEY": "order_id"
-    }
+    },
 }
 
 INSTALLED_APPS = [

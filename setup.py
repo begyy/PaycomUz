@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="PaycomUz",
-    version="2.2",
+    version="3.1",
     author="Sadullayev Bekhzod",
     author_email="begymrx@gmail.com",
     description="Paycomuz",
