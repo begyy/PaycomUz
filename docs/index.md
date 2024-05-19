@@ -10,7 +10,7 @@
 <div class="termy">
 
 ```console
-pip install clickuz
+pip install PaycomUz
 
 pip install django
 
